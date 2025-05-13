@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\HomepageController; 
+use App\Http\Controllers\ProductCategoryController; 
+use App\Http\Controllers\ProductController;
  
-Route::get('/',[HomepageController::class,'index']); 
+Route::get('/',[HomepageController::class,'index'])->name('home'); 
 Route::get('product', [HomepageController::class, 'product']);
 Route::get('product/{slug}', [HomepageController::class, 'product']); 
 Route::get('categories',[HomepageController::class, 'categories']); 
@@ -62,6 +64,16 @@ Route::get('checkout', [HomepageController::class, 'checkout']);
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+Route::group(['prefix'=>'dashboard'], function(){
+
+    Route::resource('categories',ProductCategoryController::class);
+});
+
+Route::group(['prefix'=>'dashboard'], function(){
+
+    Route::resource('products',ProductController::class);
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
